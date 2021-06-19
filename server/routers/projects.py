@@ -4,12 +4,15 @@ from sqlalchemy.orm.session import Session
 
 from models.project import Project
 from schemas.project import ProjectCreate, ProjectUpdate, ProjectResult
+from schemas.task import TaskResult
 from providers.auth import AuthProvider
 from crud.project import ProjectCRUD
+from crud.task import TaskCRUD
 from database import get_db
 
 auth_provider = AuthProvider()
 crud = ProjectCRUD()
+task_crud = TaskCRUD()
 
 router = APIRouter(
     prefix="/projects",
@@ -86,3 +89,11 @@ def update_project(
     context.refresh(project)
 
     return project
+
+
+@router.get("/{ID}/tasks")
+def get_tasks_assigned_to_project(
+    ID: int,
+    context: Session = Depends(get_db)
+):
+    task_crud.get_tasks_by_project_id(context, ID)

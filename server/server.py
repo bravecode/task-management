@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from database import Base, engine
-from routers import users, projects, tasks, categories, auth
+from routers import users, projects, tasks, auth
 
 server = FastAPI()
 
@@ -12,5 +12,4 @@ Base.metadata.create_all(engine)
 server.include_router(users.router)
 server.include_router(projects.router)
 server.include_router(tasks.router)
-server.include_router(categories.router)
 server.include_router(auth.router)
