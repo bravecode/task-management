@@ -1,3 +1,4 @@
+from os import stat_result
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm.session import Session
 
@@ -46,13 +47,21 @@ def login(request: AuthLogin, context: Session = Depends(get_db)):
         )
 
     return {
-        "token": auth_provider.encode_token({
-            "username": user.username,
-            "email": user.email
-        })
+        "token": auth_provider.encode_token(user.id)
     }
 
 
 @router.get('/me')
-def me(user=Depends(auth_provider.auth_wrapper)):
+def me(
+    userID=Depends(auth_provider.get_user_id),
+    context: Session = Depends(get_db)
+):
+    user = context.query(User).get(userID)
+
+    if not user:
+        raise HTTPException(
+            stat_result=status.HTTP_404_NOT_FOUND,
+            detail="User with specified ID not found."
+        )
+
     return user

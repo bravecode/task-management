@@ -9,7 +9,7 @@ class Project(Base):
     __tablename__ = "projects"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String(64))
     author_id = Column(Integer, ForeignKey("users.id"))
 
     author = relationship("User", back_populates="projects")

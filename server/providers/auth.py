@@ -5,7 +5,6 @@ from passlib.context import CryptContext
 from decouple import config
 from datetime import datetime, timedelta
 from jose import jwt
-import json
 
 
 class AuthProvider:
@@ -25,11 +24,11 @@ class AuthProvider:
         return self.context.hash(password)
 
     # Token Methods
-    def encode_token(self, data: dict):
+    def encode_token(self, userID: int):
         to_encode = {
             "exp": datetime.utcnow() + timedelta(minutes=self.token_duration),
             "iat": datetime.utcnow(),
-            "sub": json.dumps(data)
+            "sub": str(userID)
         }
 
         return jwt.encode(
@@ -45,21 +44,24 @@ class AuthProvider:
                 self.token_secret,
                 algorithms=self.token_algorithm
             )
-            return json.loads(payload['sub'])
+
+            return int(payload['sub'])
         except jwt.ExpiredSignatureError:
             raise HTTPException(
                 status.HTTP_401_UNAUTHORIZED,
                 detail="Token expired"
             )
         except BaseException as e:
+            print(e)
+
             raise HTTPException(
                 status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token"
             )
 
-    # Validate if token is provided, then decode it
-    def auth_wrapper(
+    # Validate if token is provided, then decode it & return user ID
+    def get_user_id(
         self,
         auth: HTTPAuthorizationCredentials = Security(security)
-    ):
+    ) -> int:
         return self.decode_token(auth.credentials)
