@@ -13,4 +13,4 @@ class Category(Base):
     project_id = Column(Integer, ForeignKey("projects.id"))
 
     project = relationship("Project", back_populates="categories")
-    tasks = relationship("Task", back_populates="category_id")
+    tasks = relationship("Task", back_populates="category")

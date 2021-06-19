@@ -15,4 +15,4 @@ class Task(Base):
     category_id = Column(Integer, ForeignKey("categories.id"))
 
     project = relationship("Project", back_populates="tasks")
-    category = relationship("Category", back_populates="categories")
+    category = relationship("Category", back_populates="tasks")

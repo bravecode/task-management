@@ -12,4 +12,4 @@ class User(Base):
     email = Column(String)
     password = Column(String)
 
-    projects = relationship("Project", back_populates="author_id")
+    projects = relationship("Project", back_populates="author")

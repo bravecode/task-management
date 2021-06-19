@@ -13,5 +13,5 @@ class Project(Base):
     author_id = Column(Integer, ForeignKey("users.id"))
 
     author = relationship("User", back_populates="projects")
-    categories = relationship("Category", back_populates="project_id")
-    tasks = relationship("Task", back_populates="project_id")
+    categories = relationship("Category", back_populates="project")
+    tasks = relationship("Task", back_populates="project")
