@@ -1,0 +1,19 @@
+.button {
+    height: 40px;
+    padding: 0 20px;
+    background: none;
+    border: 1px solid #111111;
+    cursor: pointer;
+
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #111111;
+    text-transform: uppercase;
+}
+
+.button:hover {
+    cursor: pointer;
+    background: #111111;
+    color: #FFFFFF;
+}

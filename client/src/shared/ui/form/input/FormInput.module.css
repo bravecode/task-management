@@ -1,0 +1,15 @@
+.input {
+    height: 40px;
+    width: 100%;
+    background: #F4F4F4;
+    border: none;
+    padding: 0 10px;
+
+    display: flex;
+    align-items: center;
+
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #111111;
+}
