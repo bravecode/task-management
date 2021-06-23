@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import classes from './FormInput.module.css';
 
-interface FormInputProps {
+interface FormInputProps extends React.HTMLProps<HTMLInputElement> {
     name: string;
     className?: string;
 }
@@ -10,6 +10,7 @@ interface FormInputProps {
 const FormInput: React.FC<FormInputProps> = ({
     name,
     className,
+    ...props
 }) => {
     const containerStyles = classNames({
         [classes.input]: true,
@@ -17,7 +18,8 @@ const FormInput: React.FC<FormInputProps> = ({
     });
 
     return (
-        <input name={name} id={name} className={containerStyles} />
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        <input {...props} name={name} id={props.id || name} className={containerStyles} />
     );
 };
 
