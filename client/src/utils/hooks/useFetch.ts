@@ -12,6 +12,7 @@ interface UseFetchProps<T> {
 
 interface UseFetchResponse<T> {
     loading: boolean;
+    refetch: () => void;
     data?: T;
     error?: string;
 }
@@ -63,6 +64,7 @@ function useFetch<T>(props: UseFetchProps<T>): UseFetchResponse<T> {
         loading,
         error,
         data,
+        refetch: handleFetch,
     };
 }
 

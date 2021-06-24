@@ -3,10 +3,11 @@ import React from 'react';
 import useFetch from '../../utils/hooks/useFetch';
 import Project, { ProjectProps } from './components/Project';
 import projectMapper from './utils/projectMapper';
+import CreateProject from './components/CreateProject';
 
 const Projects: React.FC = () => {
     // Get Projects
-    const { data, loading } = useFetch<ProjectProps[]>({
+    const { data, loading, refetch } = useFetch<ProjectProps[]>({
         url: 'http://localhost:8000/projects',
         options: {
             method: 'GET',
@@ -21,6 +22,8 @@ const Projects: React.FC = () => {
 
     return (
         <div>
+            <CreateProject onCreate={refetch} />
+
             {
                 data?.map((project) => (
                     <Project key={project.ID} ID={project.ID} name={project.name} />
