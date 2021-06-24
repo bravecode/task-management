@@ -7,7 +7,7 @@ import FormLabel from '../../../shared/ui/form/label/FormLabel';
 import FormInput from '../../../shared/ui/form/input/FormInput';
 import Button from '../../../shared/ui/button/Button';
 import useForm from '../../../shared/ui/form/utils/useFormHook';
-import AuthService, { LoginValues } from '../../../services/authService';
+import AuthService, { LoginValues } from '../../../utils/services/authService';
 
 const Page: React.FC = () => {
     const history = useHistory();

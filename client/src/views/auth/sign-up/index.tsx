@@ -7,7 +7,7 @@ import FormLabel from '../../../shared/ui/form/label/FormLabel';
 import FormInput from '../../../shared/ui/form/input/FormInput';
 import Button from '../../../shared/ui/button/Button';
 import useFormHook from '../../../shared/ui/form/utils/useFormHook';
-import { RegisterValues } from '../../../services/authService';
+import { RegisterValues } from '../../../utils/services/authService';
 
 const Page: React.FC = () => {
     const { onInputChange } = useFormHook<RegisterValues>({

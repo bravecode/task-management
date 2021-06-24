@@ -1,12 +1,13 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import AuthService from '../../services/authService';
+import AuthService from '../../utils/services/authService';
 import Head from '../../shared/head/Head';
 
 // Views
 import Home from '../../views/home';
 import Logout from '../../views/logout';
+import Projects from '../../views/projects';
 
 const TemplateDefault: React.FC = () => {
     const authService = new AuthService({});
@@ -23,6 +24,7 @@ const TemplateDefault: React.FC = () => {
 
             <Switch>
                 <Route exact path="/" component={Home} />
+                <Route exact path="/projects" component={Projects} />
                 <Route path="/logout" component={Logout} />
                 <Redirect to="/" />
             </Switch>
