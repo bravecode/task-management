@@ -27,7 +27,9 @@ def register(request: AuthRegister, context: Session = Depends(get_db)):
     context.commit()
     context.refresh(user)
 
-    return user
+    return {
+        "token": auth_provider.encode_token(user.id)
+    }
 
 
 @router.post("/login")

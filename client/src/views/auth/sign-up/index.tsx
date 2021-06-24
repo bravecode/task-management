@@ -7,15 +7,10 @@ import FormLabel from '../../../shared/ui/form/label/FormLabel';
 import FormInput from '../../../shared/ui/form/input/FormInput';
 import Button from '../../../shared/ui/button/Button';
 import useFormHook from '../../../shared/ui/form/utils/useFormHook';
-
-interface FormValues {
-    username: string;
-    email: string;
-    password: string;
-}
+import { RegisterValues } from '../../../services/authService';
 
 const Page: React.FC = () => {
-    const { onInputChange, values } = useFormHook<FormValues>({
+    const { onInputChange } = useFormHook<RegisterValues>({
         initialValues: {
             username: '',
             email: '',
@@ -25,7 +20,7 @@ const Page: React.FC = () => {
 
     // Handlers
     const handleSubmit = () => {
-        console.log(values);
+        console.log('test');
     };
 
     return (
