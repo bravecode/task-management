@@ -1,29 +1,36 @@
 import React from 'react';
+import {
+    Modal, PrimaryButton, Stack, TextField as Input,
+} from '@fluentui/react';
+import classes from './CreateProject.module.css';
 
-import useFormHook from '../../../shared/ui/form/utils/useFormHook';
-import FormGroup from '../../../shared/ui/form/group/FormGroup';
-import FormInput from '../../../shared/ui/form/input/FormInput';
-import FormLabel from '../../../shared/ui/form/label/FormLabel';
-import Button from '../../../shared/ui/button/Button';
+import useform from '../../../utils/hooks/useForm';
 import APIService from '../../../utils/services/apiService';
 
 interface CreateProjectProps {
-    onCreate: () => void;
+    open?: boolean;
+    onModalClose: () => void;
+    onProjectsRefetch: () => void;
 }
 
 interface Project {
     name: string;
 }
 
-const CreateProject: React.FC<CreateProjectProps> = ({ onCreate }) => {
+const CreateProject: React.FC<CreateProjectProps> = ({
+    open,
+    onProjectsRefetch,
+    onModalClose,
+}) => {
     const apiService = new APIService({
         onSuccess: () => {
-            onCreate();
+            onModalClose();
+            onProjectsRefetch();
         },
     });
 
     // Form
-    const { onInputChange, values } = useFormHook<Project>({
+    const { onInputChange, values } = useform<Project>({
         initialValues: {
             name: '',
         },
@@ -35,17 +42,23 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onCreate }) => {
     };
 
     return (
-        <div>
-            <FormGroup>
-                <FormLabel label="Project Name" htmlFor="name" />
-                <FormInput name="name" onChange={onInputChange} value={values.name} />
-            </FormGroup>
-            <FormGroup>
-                <Button onClick={handleSubmit}>
-                    Create
-                </Button>
-            </FormGroup>
-        </div>
+        <Modal isOpen={open} onDismiss={onModalClose}>
+            <Stack tokens={{ childrenGap: 10 }} className={classes.container}>
+                <Input
+                    label="PROJECT NAME"
+                    name="name"
+                    value={values.name}
+                    onChange={onInputChange}
+                    required
+                />
+
+                <PrimaryButton
+                    text="Create"
+                    type="button"
+                    onClick={handleSubmit}
+                />
+            </Stack>
+        </Modal>
     );
 };
 

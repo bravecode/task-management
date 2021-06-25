@@ -29,6 +29,8 @@ class APIService {
     private onDone: () => void = () => {};
 
     constructor(props: APIServiceProps) {
+        console.log('API Service Initialized.');
+
         if (typeof props.useTokenHeader !== 'undefined') {
             this.useJWT = props.useTokenHeader;
         }

@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import {
+    MessageBar, MessageBarType, Stack, Text,
+} from '@fluentui/react';
 import classes from './index.module.css';
 
-import FormGroup from '../../../shared/ui/form/group/FormGroup';
-import FormLabel from '../../../shared/ui/form/label/FormLabel';
-import FormInput from '../../../shared/ui/form/input/FormInput';
-import Button from '../../../shared/ui/button/Button';
-import useForm from '../../../shared/ui/form/utils/useFormHook';
+import Form from './components/Form';
 import AuthService, { LoginValues } from '../../../utils/services/authService';
 
 const Page: React.FC = () => {
     const history = useHistory();
-
     const [error, setError] = useState('');
 
     // Handlers
@@ -23,65 +21,50 @@ const Page: React.FC = () => {
         setError(value);
     };
 
+    const handleErrorClose = () => {
+        setError('');
+    };
+
     // State
     const authService = new AuthService({
         onSuccess: handleSuccess,
         onFail: handleFail,
     });
 
-    const { onInputChange, values } = useForm<LoginValues>({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-    });
-
-    const handleSubmit = () => {
+    const handleSubmit = (values: LoginValues) => {
         authService.login(values);
     };
 
     return (
         <div className={classes.page}>
 
-            <header className={classes.header}>
-                <h1 className={classes.header__title}>
-                    SIGN IN
-                </h1>
-                <p className={classes.header__subtitle}>
-                    Access your account.
-                </p>
-            </header>
-
-            <div className={classes.form}>
-                <FormGroup>
+            <Stack className={classes.form} tokens={{ childrenGap: 20 }}>
+                <Stack.Item>
+                    <Stack as="header" tokens={{ childrenGap: 5 }}>
+                        <Text variant="xLarge" block>
+                            SIGN IN
+                        </Text>
+                        <Text variant="medium" block>
+                            Access your account.
+                        </Text>
+                    </Stack>
+                </Stack.Item>
+                <Stack.Item>
                     {
                         error && (
-                            <p>
+                            <MessageBar
+                                messageBarType={MessageBarType.error}
+                                onDismiss={handleErrorClose}
+                            >
                                 { error }
-                            </p>
+                            </MessageBar>
                         )
                     }
-                </FormGroup>
-
-                <FormGroup>
-                    <FormLabel label="USERNAME" htmlFor="username" />
-                    <FormInput name="email" onChange={onInputChange} value={values.email} />
-                </FormGroup>
-
-                <FormGroup>
-                    <FormLabel label="PASSWORD" htmlFor="password" />
-                    <FormInput name="password" onChange={onInputChange} value={values.password} />
-                </FormGroup>
-
-                <div className={classes.form__footer}>
-                    <Link to="/auth/sign-up">
-                        Don&apos;t have an account? Register here.
-                    </Link>
-                    <Button onClick={handleSubmit}>
-                        Login
-                    </Button>
-                </div>
-            </div>
+                </Stack.Item>
+                <Stack.Item>
+                    <Form onSubmit={handleSubmit} />
+                </Stack.Item>
+            </Stack>
         </div>
     );
 };

@@ -1,66 +1,70 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import {
+    MessageBar, MessageBarType, Stack, Text,
+} from '@fluentui/react';
 import classes from './index.module.css';
 
-import FormGroup from '../../../shared/ui/form/group/FormGroup';
-import FormLabel from '../../../shared/ui/form/label/FormLabel';
-import FormInput from '../../../shared/ui/form/input/FormInput';
-import Button from '../../../shared/ui/button/Button';
-import useFormHook from '../../../shared/ui/form/utils/useFormHook';
-import { RegisterValues } from '../../../utils/services/authService';
+import Form from './components/Form';
+import AuthService, { RegisterValues } from '../../../utils/services/authService';
 
 const Page: React.FC = () => {
-    const { onInputChange } = useFormHook<RegisterValues>({
-        initialValues: {
-            username: '',
-            email: '',
-            password: '',
-        },
-    });
+    const history = useHistory();
+    const [error, setError] = useState('');
 
     // Handlers
-    const handleSubmit = () => {
-        console.log('test');
+    const handleSuccess = () => {
+        history.push('/');
+    };
+
+    const handleFail = (value: string) => {
+        setError(value);
+    };
+
+    const handleErrorClose = () => {
+        setError('');
+    };
+
+    // State
+    const authService = new AuthService({
+        onSuccess: handleSuccess,
+        onFail: handleFail,
+    });
+
+    const handleSubmit = (values: RegisterValues) => {
+        authService.register(values);
     };
 
     return (
         <div className={classes.page}>
 
-            <header className={classes.header}>
-                <h1 className={classes.header__title}>
-                    SIGN UP
-                </h1>
-                <p className={classes.header__subtitle}>
-                    Create new account.
-                </p>
-            </header>
-
-            <div className={classes.form}>
-                <FormGroup>
-                    <FormLabel label="USERNAME" htmlFor="username" />
-                    <FormInput name="username" onChange={onInputChange} />
-                </FormGroup>
-
-                <FormGroup>
-                    <FormLabel label="EMAIL" htmlFor="email" />
-                    <FormInput name="email" onChange={onInputChange} />
-                </FormGroup>
-
-                <FormGroup>
-                    <FormLabel label="PASSWORD" htmlFor="password" />
-                    <FormInput name="password" onChange={onInputChange} />
-                </FormGroup>
-
-                <div className={classes.form__footer}>
-                    <Link to="/auth/sign-in">
-                        Already have an account? Login.
-                    </Link>
-                    <Button onClick={handleSubmit}>
-                        Register
-                    </Button>
-                </div>
-            </div>
-
+            <Stack className={classes.form} tokens={{ childrenGap: 20 }}>
+                <Stack.Item>
+                    <Stack as="header" tokens={{ childrenGap: 5 }}>
+                        <Text variant="xLarge" block>
+                            SIGN UP
+                        </Text>
+                        <Text variant="medium" block>
+                            Create new account.
+                        </Text>
+                    </Stack>
+                </Stack.Item>
+                <Stack.Item>
+                    {
+                        error && (
+                            <MessageBar
+                                messageBarType={MessageBarType.error}
+                                onDismiss={handleErrorClose}
+                            >
+                                { error }
+                            </MessageBar>
+                        )
+                    }
+                </Stack.Item>
+                <Stack.Item>
+                    <Form onSubmit={handleSubmit} />
+                </Stack.Item>
+            </Stack>
         </div>
     );
 };

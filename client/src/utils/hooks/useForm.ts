@@ -8,26 +8,28 @@ interface UseFormHookResult<T> {
     values: T;
 
     // eslint-disable-next-line no-unused-vars
-    onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onInputChange: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export default function useFormHook<T>({
+function useForm<T>({
     initialValues,
 }: UseFormHookProps<T>): UseFormHookResult<T> {
     const [values, setValues] = useState<T>(initialValues);
 
     // Handlers
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!(e.target.name in values)) {
+    const handleInputChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.currentTarget;
+
+        if (!(name in values)) {
             throw Object.assign(
-                new Error(`[useFormHook] Input with name ${e.target.name} is not key of interface.`),
+                new Error(`[useFormHook] Input with name ${name} is not key of interface.`),
                 { code: 402 },
             );
         }
 
         setValues((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value,
+            [name]: value,
         }));
     };
 
@@ -36,3 +38,5 @@ export default function useFormHook<T>({
         values,
     };
 }
+
+export default useForm;

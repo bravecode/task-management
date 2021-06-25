@@ -7,42 +7,5 @@
 }
 
 .form {
-    width: 640px;
-
-    display: grid;
-    grid-template-columns: 1fr;;
-    gap: 20px;
-}
-
-.form__footer {
-    width: 100%;
-
-    display: grid;
-    grid-template: repeat(2, auto) / 1fr;
-    gap: 10px;
-}
-
-.header {
-    margin: 0 0 40px 0;
-}
-
-.header__title,
-.header__subtitle {
-    line-height: 1;
-}
-
-.header__title {
-    margin: 0 0 5px 0;
-
-    font-size: 24px;
-    font-weight: 700;
-    color: #111111;
-}
-
-.header__subtitle {
-    margin: 0;
-
-    font-size: 14px;
-    font-weight: 400;
-    color: #888888;
+    width: 480px;
 }
