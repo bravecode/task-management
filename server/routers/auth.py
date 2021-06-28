@@ -1,9 +1,8 @@
-from os import stat_result
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm.session import Session
 
 from models.user import User
-from schemas.auth import AuthRegister, AuthLogin, AuthUser
+from schemas.auth import AuthRegister, AuthLogin
 from database import get_db
 from providers.auth import AuthProvider
 
@@ -15,20 +14,28 @@ router = APIRouter(
 )
 
 
-@router.post("/register", response_model=AuthUser)
+@router.post("/register")
 def register(request: AuthRegister, context: Session = Depends(get_db)):
-    user = User(
+    user = context.query(User).filter(User.email == request.email).first()
+
+    if user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with that email is already in our database."
+        )
+
+    to_create = User(
         username=request.username,
         email=request.email,
         password=auth_provider.hash_password(request.password)
     )
 
-    context.add(user)
+    context.add(to_create)
     context.commit()
-    context.refresh(user)
+    context.refresh(to_create)
 
     return {
-        "token": auth_provider.encode_token(user.id)
+        "token": auth_provider.encode_token(to_create.id)
     }
 
 

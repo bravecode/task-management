@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import { PrimaryButton } from '@fluentui/react';
+import classes from './index.module.css';
 
 import useFetch from '../../utils/hooks/useFetch';
-import Project, { ProjectProps } from './components/Project';
-import projectMapper from './utils/projectMapper';
+import Project from './components/Project';
+import projectMapper, { IProject } from './utils/projectMapper';
 import CreateProject from './components/CreateProject';
+import EditProject from './components/EditProject';
 
-type ProjectsModal = 'none' | 'create' | 'edit';
+type ProjectsModal = {
+    type: 'none'
+} | {
+    type: 'create'
+} | {
+    type: 'edit',
+    data: IProject
+}
 
 const Projects: React.FC = () => {
-    const [modal, setModal] = useState<ProjectsModal>('none');
+    const [modal, setModal] = useState<ProjectsModal>({ type: 'none' });
 
     // Get Projects
-    const { data, loading, refetch } = useFetch<ProjectProps[]>({
+    const { data, loading, refetch } = useFetch<IProject[]>({
         url: 'http://localhost:8000/projects',
         options: {
             method: 'GET',
@@ -23,11 +32,18 @@ const Projects: React.FC = () => {
 
     // Handlers
     const handleModalClose = () => {
-        setModal('none');
+        setModal({ type: 'none' });
     };
 
     const handleProjectCreate = () => {
-        setModal('create');
+        setModal({ type: 'create' });
+    };
+
+    const handleProjectEdit = (values: IProject) => {
+        setModal({
+            type: 'edit',
+            data: values,
+        });
     };
 
     if (loading) {
@@ -38,13 +54,30 @@ const Projects: React.FC = () => {
         <div>
             <PrimaryButton text="New Project" onClick={handleProjectCreate} />
 
-            <CreateProject onProjectsRefetch={refetch} open={modal === 'create'} onModalClose={handleModalClose} />
+            <CreateProject onProjectsRefetch={refetch} open={modal.type === 'create'} onModalClose={handleModalClose} />
 
             {
-                data?.map((project) => (
-                    <Project key={project.ID} ID={project.ID} name={project.name} />
-                ))
+                modal.type === 'edit' && (
+                    <EditProject
+                        initialValues={modal.data}
+                        onModalClose={handleModalClose}
+                        onProjectsRefetch={refetch}
+                    />
+                )
             }
+
+            <div className={classes.projects__list}>
+                {
+                    data?.map((project) => (
+                        <Project
+                            key={project.ID}
+                            ID={project.ID}
+                            name={project.name}
+                            onProjectEdit={handleProjectEdit}
+                        />
+                    ))
+                }
+            </div>
         </div>
     );
 };

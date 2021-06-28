@@ -81,9 +81,7 @@ def update_project(
     project = crud.get(context, ID)
 
     if request.name:
-        project.update({
-            "name": request.name
-        })
+        project.name = request.name
 
     context.commit()
     context.refresh(project)

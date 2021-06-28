@@ -6,16 +6,16 @@ import classes from './CreateProject.module.css';
 
 import useform from '../../../utils/hooks/useForm';
 import APIService from '../../../utils/services/apiService';
-import { IProjectValues } from '../utils/projectMapper';
+import { IProject } from '../utils/projectMapper';
 
-interface CreateProjectProps {
-    open?: boolean;
+interface EditProjectProps {
+    initialValues: IProject;
     onModalClose: () => void;
     onProjectsRefetch: () => void;
 }
 
-const CreateProject: React.FC<CreateProjectProps> = ({
-    open,
+const EditProject: React.FC<EditProjectProps> = ({
+    initialValues,
     onProjectsRefetch,
     onModalClose,
 }) => {
@@ -24,22 +24,18 @@ const CreateProject: React.FC<CreateProjectProps> = ({
             onModalClose();
             onProjectsRefetch();
         },
-    }), [open]);
+    }), [initialValues]);
 
     // Form
-    const { onInputChange, values } = useform<IProjectValues>({
-        initialValues: {
-            name: '',
-        },
-    });
+    const { onInputChange, values } = useform<IProject>({ initialValues });
 
     // Handlers
     const handleSubmit = () => {
-        apiService.post('/projects', JSON.stringify(values));
+        apiService.put(`/projects/${initialValues.ID}`, JSON.stringify(values));
     };
 
     return (
-        <Modal isOpen={open} onDismiss={onModalClose}>
+        <Modal isOpen onDismiss={onModalClose}>
             <Stack tokens={{ childrenGap: 10 }} className={classes.container}>
                 <Input
                     label="PROJECT NAME"
@@ -50,7 +46,7 @@ const CreateProject: React.FC<CreateProjectProps> = ({
                 />
 
                 <PrimaryButton
-                    text="Create"
+                    text="Edit Project"
                     type="button"
                     onClick={handleSubmit}
                 />
@@ -59,4 +55,4 @@ const CreateProject: React.FC<CreateProjectProps> = ({
     );
 };
 
-export default CreateProject;
+export default EditProject;

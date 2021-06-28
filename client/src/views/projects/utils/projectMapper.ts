@@ -1,6 +1,12 @@
-import { ProjectProps } from '../components/Project';
+export interface IProjectValues {
+    name: string;
+}
 
-const projectMapper = (data: any[]): ProjectProps[] => data.map((item): ProjectProps => ({
+export interface IProject extends IProjectValues {
+    ID: string;
+}
+
+const projectMapper = (data: any[]): IProject[] => data.map((item): IProject => ({
     ID: item.id,
     name: item.name,
 }));
