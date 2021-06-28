@@ -107,6 +107,30 @@ class AuthService {
             });
     }
 
+    public refresh = () => {
+        // eslint-disable-next-line no-undef
+        const requestOptions: RequestInit = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        };
+
+        return fetch('http://localhost:8000/auth/refresh', requestOptions)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.detail) {
+                    this.errorHandler(res.detail);
+                } else {
+                    this.successHandler(res.token);
+                }
+            })
+            .catch(() => {
+                this.errorHandler('Network error.');
+            });
+    }
+
     public logout = () => localStorage.removeItem('token');
 
     public getToken = () => localStorage.getItem('token');

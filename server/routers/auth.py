@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, security, status
+from fastapi.param_functions import Security
+from fastapi.security.http import HTTPAuthorizationCredentials
 from sqlalchemy.orm.session import Session
 
 from models.user import User
@@ -57,6 +59,13 @@ def login(request: AuthLogin, context: Session = Depends(get_db)):
 
     return {
         "token": auth_provider.encode_token(user.id)
+    }
+
+
+@router.get("/refresh")
+def refresh_token(token=Depends(auth_provider.refresh_token)):
+    return {
+        "token": token
     }
 
 

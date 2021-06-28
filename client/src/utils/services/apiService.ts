@@ -57,7 +57,7 @@ class APIService {
             method: 'GET',
             headers: this.getHeaders(headers),
             ...options,
-        });
+        }, () => { this.get(path, { headers, ...options }); });
     }
 
     public post(path: string, data: string, { headers, ...options }: RequestInit = {}) {
@@ -66,7 +66,7 @@ class APIService {
             headers: this.getHeaders(headers),
             body: data,
             ...options,
-        });
+        }, () => { this.post(path, data, { headers, ...options }); });
     }
 
     public put(path: string, data: string, { headers, ...options }: RequestInit = {}) {
@@ -75,7 +75,7 @@ class APIService {
             headers: this.getHeaders(headers),
             body: data,
             ...options,
-        });
+        }, () => { this.put(path, data, { headers, ...options }); });
     }
 
     public delete(path: string, { headers, ...options }: RequestInit = {}) {
@@ -83,15 +83,15 @@ class APIService {
             method: 'DELETE',
             headers: this.getHeaders(headers),
             ...options,
-        });
+        }, () => { this.delete(path, { headers, ...options }); });
     }
 
-    private handleRequest(path: string, options: RequestInit) {
+    private handleRequest(path: string, options: RequestInit, currentFunc: Function) {
         return fetch(this.getURL(path), options)
             .then((res) => res.json())
             .then((res) => {
                 if (res.detail) {
-                    this.onFail(res.detail);
+                    this.handleRequestFailure(res.detail, currentFunc);
                 } else {
                     this.onSuccess(res);
                 }
@@ -102,6 +102,23 @@ class APIService {
             .finally(() => {
                 this.onDone();
             });
+    }
+
+    // TODO: Better handling of JWT Refreshing (& Implementation of access & refresh tokens)
+    private async handleRequestFailure(err: string, currentFunc: Function) {
+        if (err === 'Token expired') {
+            console.log('Token has expired, getting new one...');
+
+            // Refresh Token
+            await this.authService.refresh();
+
+            // Re-trigger request
+            currentFunc();
+
+            return;
+        }
+
+        this.onFail(err);
     }
 
     // Helpers
