@@ -11,6 +11,9 @@ class TaskBase(BaseModel):
     description: str
     category: CategoryEnum = CategoryEnum.to_do
 
+    class Config():
+        orm_module: True
+
 
 # Properties to receive via API on creation
 class TaskCreate(TaskBase):

@@ -4,7 +4,7 @@ from sqlalchemy.orm.session import Session
 
 from models.project import Project
 from schemas.project import ProjectCreate, ProjectUpdate, ProjectResult
-from schemas.task import TaskResult
+from schemas.task import TaskBase
 from providers.auth import AuthProvider
 from crud.project import ProjectCRUD
 from crud.task import TaskCRUD
@@ -94,4 +94,6 @@ def get_tasks_assigned_to_project(
     ID: int,
     context: Session = Depends(get_db)
 ):
-    task_crud.get_tasks_by_project_id(context, ID)
+    tasks = task_crud.get_tasks_by_project_id(context, ID)
+
+    return tasks

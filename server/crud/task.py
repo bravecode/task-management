@@ -28,4 +28,4 @@ class TaskCRUD:
         context: Session,
         project_id: int
     ) -> List[Task]:
-        return context.query(Task).filter(Task.project_id == project_id)
+        return context.query(Task).filter(Task.project_id == project_id).all()

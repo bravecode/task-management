@@ -5,11 +5,13 @@ from sqlalchemy.orm.session import Session
 from models.task import Task
 from schemas.task import TaskCreate, TaskUpdate, TaskResult
 from crud.task import TaskCRUD
+from crud.project import ProjectCRUD
 from providers.auth import AuthProvider
 from database import get_db
 
 auth_provider = AuthProvider()
 crud = TaskCRUD()
+project_crud = ProjectCRUD()
 
 router = APIRouter(
     prefix="/tasks",
@@ -28,8 +30,11 @@ def get_task(ID: int, context: Session = Depends(get_db)):
     return crud.get(context, ID)
 
 
-@router.post("", response_model=TaskResult)
+@router.post("")
 def create_task(request: TaskCreate, context: Session = Depends(get_db)):
+    # Check if project exists
+    project_crud.get(context, request.project_id)
+
     to_create = Task(
         title=request.title,
         description=request.description,
@@ -64,11 +69,9 @@ def update_task(
 ):
     task = crud.get(context, ID)
 
-    task.update({
-        "title": request.title or task.title,
-        "description": request.description or task.description,
-        "category": request.category or task.category
-    })
+    task.title = request.title or task.title
+    task.description = request.description or task.description
+    task.category = request.category or task.category
 
     context.commit()
     context.refresh(task)
