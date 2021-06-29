@@ -25,7 +25,7 @@ const Task: React.FC<TaskProps> = ({
     return (
         <Draggable draggableId={ID} index={0}>
             {(provided) => (
-                <div
+                <article
                     className={containerStyles}
                     ref={provided.innerRef}
                     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -33,13 +33,18 @@ const Task: React.FC<TaskProps> = ({
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...provided.dragHandleProps}
                 >
-                    <Text variant="medium" as="h3" className={classes.task__title}>
-                        { title }
-                    </Text>
-                    <Text variant="small" as="h4" className={classes.task__author}>
-                        { author }
-                    </Text>
-                </div>
+                    <div className={classes.task__avatar}>
+                        { title[0].toUpperCase() }
+                    </div>
+                    <header className={classes.task__header}>
+                        <Text variant="medium" as="h3" className={classes.task__title}>
+                            { title }
+                        </Text>
+                        <Text variant="small" as="h4" className={classes.task__author}>
+                            { author }
+                        </Text>
+                    </header>
+                </article>
             )}
         </Draggable>
     );

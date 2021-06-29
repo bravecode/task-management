@@ -24,7 +24,7 @@ const Board: React.FC<BoardProps> = ({
                 <div
                     className={classes.board__list}
                     ref={provided.innerRef}
-                    style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }}
+                    style={{ backgroundColor: snapshot.isDraggingOver ? 'rgb(255, 235, 230)' : 'rgb(235, 236, 240)' }}
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...provided.droppableProps}
                 >

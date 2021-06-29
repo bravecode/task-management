@@ -47,10 +47,11 @@ const Project: React.FC = () => {
         // X. Map to State
         // X. Handle Creation
         // X. Handle Moving between categories
-        // 4. Handle Moving in the same category
+        // 4. Handle Moving in the same category (add index)
         // 5. Design Update
         // 6. Clean Up
         // 7. Handle Update
+        // 8. Remove Functionality
         if (data) {
             setBoards(prepareBoards(data));
         }
@@ -137,22 +138,24 @@ const Project: React.FC = () => {
                 onProjectCreate={handleTaskCreate}
             />
 
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <Board
-                    title="TO DO"
-                    items={boards.to_do}
-                />
+            <div className={classes.boards}>
+                <DragDropContext onDragEnd={handleDragEnd}>
+                    <Board
+                        title="TO DO"
+                        items={boards.to_do}
+                    />
 
-                <Board
-                    title="IN PROGRESS"
-                    items={boards.in_progress}
-                />
+                    <Board
+                        title="IN PROGRESS"
+                        items={boards.in_progress}
+                    />
 
-                <Board
-                    title="DONE"
-                    items={boards.done}
-                />
-            </DragDropContext>
+                    <Board
+                        title="DONE"
+                        items={boards.done}
+                    />
+                </DragDropContext>
+            </div>
 
             {
                 modal.type === 'create' && (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import classes from './index.module.css';
 
 import AuthService from '../../utils/services/authService';
 import Head from '../../shared/head/Head';
@@ -19,7 +20,7 @@ const TemplateDefault: React.FC = () => {
     }
 
     return (
-        <main className="template--default">
+        <main className={classes.template}>
 
             <Head />
 

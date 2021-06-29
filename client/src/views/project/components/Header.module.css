@@ -1,6 +1,9 @@
 .header {
+    height: 80px;
+    width: 100%;
+    background: rgb(235, 236, 240);
+    margin: 0 0 20px 0;
     padding: 0 20px;
-    grid-column: 1 / 4;
 
     display: flex;
     align-items: center;

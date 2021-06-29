@@ -24,7 +24,7 @@ const Header: React.FC<IHeaderProps> = ({ projectID, onProjectCreate }) => {
 
     return (
         <header className={classes.header}>
-            <Text variant="xxLarge">
+            <Text variant="xLarge">
                 { data?.name }
             </Text>
             <PrimaryButton

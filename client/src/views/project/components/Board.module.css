@@ -1,22 +1,18 @@
 .board {
-    min-height: 400px;
-    background: #FFFFFF;
-
-    display: grid;
-    grid-template-rows: auto 1fr;
+    width: 320px;
 }
 
 .board__title,
 .board__list {
-    padding: 20px;
+    background: rgb(235, 236, 240);
 }
 
 .board__title {
+    margin: 0;
+    padding: 20px;
     display: block;
 }
 
 .board__list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+    padding: 0 20px 80px 20px;
 }
