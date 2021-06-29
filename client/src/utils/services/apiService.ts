@@ -6,7 +6,7 @@ interface APIServiceProps {
     useTokenHeader?: boolean;
     useJSONHeader?: boolean;
     onSuccess?: (data: any) => void;
-    onFail?: () => void;
+    onFail?: (err: string) => void;
     onDone?: () => void;
 }
 
@@ -96,7 +96,8 @@ class APIService {
                     this.onSuccess(res);
                 }
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e);
                 this.onFail('Network error, try again later.');
             })
             .finally(() => {

@@ -1,0 +1,33 @@
+.task {
+    height: 60px;
+    width: 100%;
+    padding: 10px;
+    background: #F4F4F4;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.task:hover {
+    cursor: pointer;
+}
+
+.task.active {
+    background: red;
+}
+
+.task__title,
+.task__author {
+    width: 100%;
+    display: block;
+}
+
+.task__title {
+    margin: 0 0 10px 0;
+}
+
+.task__author {
+    color: #888888;
+    margin: 0;
+}

@@ -7,6 +7,7 @@ import Project from './components/Project';
 import projectMapper, { IProject } from './utils/projectMapper';
 import CreateProject from './components/CreateProject';
 import EditProject from './components/EditProject';
+import Loader from '../../shared/loader/Loader';
 
 type ProjectsModal = {
     type: 'none'
@@ -22,10 +23,7 @@ const Projects: React.FC = () => {
 
     // Get Projects
     const { data, loading, refetch } = useFetch<IProject[]>({
-        url: 'http://localhost:8000/projects',
-        options: {
-            method: 'GET',
-        },
+        url: '/projects',
         includeToken: true,
         mapper: projectMapper,
     });
@@ -47,14 +45,22 @@ const Projects: React.FC = () => {
     };
 
     if (loading) {
-        return <div>Loading data...</div>;
+        return <Loader />;
     }
 
     return (
         <div>
             <PrimaryButton text="New Project" onClick={handleProjectCreate} />
 
-            <CreateProject onProjectsRefetch={refetch} open={modal.type === 'create'} onModalClose={handleModalClose} />
+            {
+                modal.type === 'create' && (
+                    <CreateProject
+                        open
+                        onProjectsRefetch={refetch}
+                        onModalClose={handleModalClose}
+                    />
+                )
+            }
 
             {
                 modal.type === 'edit' && (

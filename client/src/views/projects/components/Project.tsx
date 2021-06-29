@@ -1,5 +1,8 @@
 import React from 'react';
-import { IconButton, Text, IContextualMenuProps } from '@fluentui/react';
+import { Link } from 'react-router-dom';
+import {
+    IconButton, Text, IContextualMenuProps, Link as Anchor,
+} from '@fluentui/react';
 import classes from './Project.module.css';
 
 import { IProject } from '../utils/projectMapper';
@@ -27,11 +30,15 @@ const Project: React.FC<ProjectProps> = ({ ID, name, onProjectEdit }) => {
         directionalHintFixed: true,
     };
 
+    const path = `/projects/${ID}`;
+
     return (
         <div className={classes.project}>
-            <Text variant="mediumPlus">
-                { name }
-            </Text>
+            <Anchor as={Link} to={path}>
+                <Text variant="mediumPlus">
+                    { name }
+                </Text>
+            </Anchor>
             <IconButton
                 menuProps={menuProps}
                 iconProps={{ iconName: 'MoreVertical' }}

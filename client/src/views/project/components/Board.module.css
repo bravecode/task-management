@@ -1,0 +1,22 @@
+.board {
+    min-height: 400px;
+    background: #FFFFFF;
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.board__title,
+.board__list {
+    padding: 20px;
+}
+
+.board__title {
+    display: block;
+}
+
+.board__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
